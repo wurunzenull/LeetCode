@@ -21,6 +21,22 @@ class Solution {
         }
         return ans;
     }
+    int trap2(vector<int>& height) {
+        stack<int> monoDecStack;
+        int ans = 0;
+        for (int i = 0; i < height.size(); i++) {
+            while (!monoDecStack.empty() && height[monoDecStack.top()] <= height[i]) {
+                int mid = monoDecStack.top();
+                monoDecStack.pop();
+                if (monoDecStack.empty()) continue;
+                int left = monoDecStack.top();
+                int right = i;
+                ans += (right - left - 1) * (min(height[right], height[left]) - height[mid]);
+            }
+            monoDecStack.push(i);
+        }
+        return ans;
+    }
 };
 
 vector<int> readArrays() {
@@ -39,6 +55,6 @@ vector<int> readArrays() {
 int main() {
     vector<int> height = readArrays();
     Solution mySolution;
-    cout << mySolution.trap(height) << endl;
+    cout << mySolution.trap2(height) << endl;
     return 0;
 }
