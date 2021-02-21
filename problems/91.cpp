@@ -3,6 +3,25 @@ using namespace std;
 
 class Solution {
    public:
+    int numDp(string s) {
+        int n = s.length();
+        if (n == 0 || s[0] == '0') return 0;
+        vector<int> dp(n, 0);
+        dp[0] = 1;
+        for (int i = 1; i < n; i++) {
+            if (s[i] == '0') {
+                if (s[i - 1] == '1' || s[i - 1] == '2') {
+                    dp[i] = i == 1 ? 1 : dp[i - 2];
+                } else
+                    return 0;
+            } else if (s[i - 1] == '1' || s[i - 1] == '2' && s[i] <= '6' && s[i] >= '1') {
+                dp[i] = i == 1 ? 1 + dp[i - 1] : dp[i - 2] + dp[i - 1];
+            } else {
+                dp[i] = dp[i - 1];
+            }
+        }
+        return dp[n - 1];
+    }
     // DFS 超时
     int numDfs(string s, int index) {
         int res = 0, res1 = -1, res2 = -1;
@@ -22,9 +41,8 @@ class Solution {
         return res;
     }
     int numDecodings(string s) {
-        int res = numDfs(s, 0);
-        if (res == -1) return 0;
-        return res;
+        return numDp(s);
+        // return numDfs(s, 0);
     }
 };
 
