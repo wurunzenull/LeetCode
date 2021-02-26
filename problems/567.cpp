@@ -34,13 +34,34 @@ class Solution {
         }
         return false;
     }
+    bool checkInclusion2(string s1, string s2) {
+        int n = s1.length(), m = s2.length();
+        if (n > m) return false;
+        vector<int> cnt(26, 0);
+        for (int i = 0; i < n; i++) {
+            cnt[s1[i] - 'a']--;
+        }
+        int left = 0, right = 0;
+        for (; right < m;) {
+            cnt[s2[right] - 'a']++;
+            right++;
+            while (cnt[s2[right - 1] - 'a'] > 0) {
+                cnt[s2[left] - 'a']--;
+                left++;
+            }
+            if (right - left == n) {
+                return true;
+            }
+        }
+        return false;
+    }
 };
 
 int main() {
     string s1, s2;
     Solution mySolution;
     while (cin >> s1 >> s2) {
-        cout << setiosflags(ios::boolalpha) << mySolution.checkInclusion(s1, s2) << endl;
+        cout << setiosflags(ios::boolalpha) << mySolution.checkInclusion2(s1, s2) << endl;
     }
     return 0;
 }
